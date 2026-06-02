@@ -1,0 +1,39 @@
+databaseChangeLog:
+  - changeSet:
+      id: 3
+      author: dev
+      changes:
+        - insert:
+            tableName: roles
+            columns:
+              - column: { name: id, valueNumeric: 1 }
+              - column: { name: name, value: "ADMIN" }
+        - insert:
+            tableName: roles
+            columns:
+              - column: { name: id, valueNumeric: 2 }
+              - column: { name: name, value: "USER" }
+        - insert:
+            tableName: users
+            columns:
+              - column: { name: email, value: "admin@example.com" }
+              - column: { name: password, value: "$2a$10$D/kXkIm5wa.CmnDN1rYs5u5f3ohxvz9RY5AneYad7e0kZFzpnHeEC" }
+              - column: { name: enabled, valueBoolean: true }
+              - column: { name: created_at, valueDate: "now()" }
+        - insert:
+            tableName: users
+            columns:
+              - column: { name: email, value: "user@example.com" }
+              - column: { name: password, value: "$2a$10$LrSk7OJ5EXlbxw.u4.LLb.RI7nt.kRt5kXtI.oQScH/wnb6oaH9TO" }
+              - column: { name: enabled, valueBoolean: true }
+              - column: { name: created_at, valueDate: "now()" }
+        - insert:
+            tableName: user_roles
+            columns:
+              - column: { name: user_id, valueNumeric: 1 }
+              - column: { name: role_id, valueNumeric: 1 }
+        - insert:
+            tableName: user_roles
+            columns:
+              - column: { name: user_id, valueNumeric: 2 }
+              - column: { name: role_id, valueNumeric: 2 }

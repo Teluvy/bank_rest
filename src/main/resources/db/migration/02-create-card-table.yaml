@@ -1,0 +1,22 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2
+      author: dev
+      changes:
+        - createTable:
+            tableName: cards
+            columns:
+              - column: { name: id, type: bigint, autoIncrement: true, constraints: { primaryKey: true, nullable: false } }
+              - column: { name: encrypted_number, type: varchar(255), constraints: { unique: true, nullable: false } }
+              - column: { name: masked_number, type: varchar(50), constraints: { nullable: false } }
+              - column: { name: owner_id, type: bigint, constraints: { nullable: false } }
+              - column: { name: expiry_date, type: date, constraints: { nullable: false } }
+              - column: { name: status, type: varchar(20), constraints: { nullable: false } }
+              - column: { name: balance, type: "decimal(19,2)", defaultValueNumeric: 0, constraints: { nullable: false } }
+              - column: { name: created_at, type: timestamp, constraints: { nullable: false } }
+        - addForeignKeyConstraint:
+            baseTableName: cards
+            baseColumnNames: owner_id
+            referencedTableName: users
+            referencedColumnNames: id
+            constraintName: fk_cards_owner
