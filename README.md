@@ -1,105 +1,136 @@
-<h1>🚀 Разработка Системы Управления Банковскими Картами</h1>
+# Bank Cards Management System
 
-<h2>📁 Стартовая структура</h2>
-  <p>
-    Проектная структура с директориями и описательными файлами (<code>README Controller.md</code>, <code>README Service.md</code> и т.д.) уже подготовлена.<br />
-    Все реализации нужно добавлять <strong>в соответствующие директории</strong>.
-  </p>
-  <p>
-    После завершения разработки <strong>временные README-файлы нужно удалить</strong>, чтобы они не попадали в итоговую сборку.
-  </p>
-  
-<h2>📝 Описание задачи</h2>
-  <p>Разработать backend-приложение на Java (Spring Boot) для управления банковскими картами:</p>
-  <ul>
-    <li>Создание и управление картами</li>
-    <li>Просмотр карт</li>
-    <li>Переводы между своими картами</li>
-  </ul>
+Backend-приложение на Java (Spring Boot) для управления банковскими картами:
+- Создание и управление картами
+- Просмотр карт (админ – всех, пользователь – своих)
+- Переводы между своими картами
+- Шифрование номеров карт, маскирование, ролевой доступ (ADMIN / USER)
 
-<h2>💳 Атрибуты карты</h2>
-  <ul>
-    <li>Номер карты (зашифрован, отображается маской: <code>**** **** **** 1234</code>)</li>
-    <li>Владелец</li>
-    <li>Срок действия</li>
-    <li>Статус: Активна, Заблокирована, Истек срок</li>
-    <li>Баланс</li>
-  </ul>
+## Стек технологий
+- Java 21
+- Spring Boot 3.4.5
+- Spring Security + JWT
+- Spring Data JPA
+- PostgreSQL 15
+- Liquibase (миграции)
+- Lombok
+- Swagger (OpenAPI 3)
+- Docker / Docker Compose
+- Maven
+- JUnit 5 + Mockito
 
-<h2>🧾 Требования</h2>
+## Запуск приложения
 
-<h3>✅ Аутентификация и авторизация</h3>
-  <ul>
-    <li>Spring Security + JWT</li>
-    <li>Роли: <code>ADMIN</code> и <code>USER</code></li>
-  </ul>
+### Требования
+- Docker & Docker Compose (рекомендуемый способ)
+- Или Java 21 + Maven + PostgreSQL (локальный запуск)
 
-<h3>✅ Возможности</h3>
-<strong>Администратор:</strong>
-  <ul>
-    <li>Создаёт, блокирует, активирует, удаляет карты</li>
-    <li>Управляет пользователями</li>
-    <li>Видит все карты</li>
-  </ul>
+### Запуск через Docker Compose
 
-<strong>Пользователь:</strong>
-  <ul>
-    <li>Просматривает свои карты (поиск + пагинация)</li>
-    <li>Запрашивает блокировку карты</li>
-    <li>Делает переводы между своими картами</li>
-    <li>Смотрит баланс</li>
-  </ul>
+# Собрать и запустить контейнеры
+```
+docker-compose up --build -d
+```
+# Просмотр логов
+```
+docker-compose logs -f app
+```
+Приложение станет доступно по адресу: http://localhost:8080
 
-<h3>✅ API</h3>
-  <ul>
-    <li>CRUD для карт</li>
-    <li>Переводы между своими картами</li>
-    <li>Фильтрация и постраничная выдача</li>
-    <li>Валидация и сообщения об ошибках</li>
-  </ul>
+## Локальный запуск (без Docker)
+```
+mvn clean spring-boot:run
+```
 
-<h3>✅ Безопасность</h3>
-  <ul>
-    <li>Шифрование данных</li>
-    <li>Ролевой доступ</li>
-    <li>Маскирование номеров карт</li>
-  </ul>
+## Аутентификация и роли
 
-<h3>✅ Работа с БД</h3>
-  <ul>
-    <li>PostgreSQL или MySQL</li>
-    <li>Миграции через Liquibase (<code>src/main/resources/db/migration</code>)</li>
-  </ul>
+    JWT – токен передаётся в заголовке: Authorization: Bearer <token>
 
-<h3>✅ Документация</h3>
-  <ul>
-    <li>Swagger UI / OpenAPI — <code>docs/openapi.yaml</code></li>
-    <li><code>README.md</code> с инструкцией запуска</li>
-  </ul>
+    Роли:
 
-<h3>✅ Развёртывание и тестирование</h3>
-  <ul>
-    <li>Docker Compose для dev-среды</li>
-    <li>Liquibase миграции</li>
-    <li>Юнит-тесты ключевой бизнес-логики</li>
-  </ul>
+        ADMIN – полное управление картами и пользователями
 
-<h2>📊 Оценка</h2>
-  <ul>
-    <li>Соответствие требованиям</li>
-    <li>Чистота архитектуры и кода</li>
-    <li>Безопасность</li>
-    <li>Обработка ошибок</li>
-    <li>Покрытие тестами</li>
-    <li>ООП и уровни абстракции</li>
-  </ul>
+        USER – работа только со своими картами
 
-<h2>💡 Технологии</h2>
-  <p>
-    Java 17+, Spring Boot, Spring Security, Spring Data JPA, PostgreSQL/MySQL, Liquibase, Docker, JWT, Swagger (OpenAPI)
-  </p>
+Тестовые учётные данные (создаются Liquibase)
 
-<h2> 📤 Формат сдачи</h2>
-<p>
-Весь код и изменения принимаются только через git-репозиторий с открытым доступом к проекту. Отправка файлов в любом виде не принимается.
-  </p>
+admin@example.com	пароль: admin123  роль: ADMIN
+
+user@example.com	пароль: user123	 роль: USER
+
+
+## API документация
+
+После запуска приложения доступны:
+
+    Swagger UI: http://localhost:8080/swagger-ui.html
+
+    OpenAPI спецификация (JSON): http://localhost:8080/v3/api-docs
+
+    Файл спецификации (YAML): docs/openapi.yaml
+
+## Основные эндпоинты
+
+### Аутентификация
+POST /api/auth/register — регистрация пользователя
+
+POST /api/auth/login — вход в систему, получение JWT токена
+
+### Администратор (роль ADMIN)
+POST /api/admin/cards — создать карту
+
+GET /api/admin/cards — список всех карт (фильтрация + пагинация)
+
+PUT /api/admin/cards/{id}/status — изменить статус карты
+
+DELETE /api/admin/cards/{id} — удалить карту
+
+POST /api/admin/users — создать пользователя
+
+GET /api/admin/users — список всех пользователей
+
+DELETE /api/admin/users/{id} — удалить пользователя
+
+PATCH /api/admin/users/{id}/enable — включить или отключить пользователя
+
+### Пользователь (роль USER)
+GET /api/user/cards — мои карты (пагинация, фильтр по статусу)
+
+POST /api/user/cards/{id}/block — запрос на блокировку своей карты
+
+GET /api/user/cards/{id}/balance — получить баланс карты
+
+POST /api/user/transfer — перевод между своими картами
+
+Фильтрация и пагинация поддерживаются через query-параметры:
+page, size, sortBy, direction, status (для карт).
+
+## Тестирование
+### Юнит-тесты
+```
+mvn clean test
+```
+Покрыты сервисы: CardService, TransferService, UserService, утилиты шифрования и маскирования.
+
+## Структура проекта (основные модули)
+
+```text
+src/main/java/com/example/bankcards/
+├── config          – конфигурации (Security, Swagger)
+├── controller      – REST контроллеры (Auth, Admin, User)
+├── dto             – объекты передачи данных
+├── entity          – JPA сущности (User, Card, Role)
+├── exception       – глобальный обработчик ошибок и кастомные исключения
+├── repository      – Spring Data JPA репозитории
+├── security        – JWT фильтры, провайдер, UserDetailsService
+├── service         – бизнес-логика (CardService, TransferService, UserService)
+└── util            – утилиты (EncryptionUtil, MaskingUtil)
+```
+
+## Разработка и сборка
+
+    Миграции БД – Liquibase (changelog в src/main/resources/db/migration)
+
+    Сборка JAR: mvn clean package
+
+    Запуск без Docker: java -jar target/bankcards-1.0.0.jar
