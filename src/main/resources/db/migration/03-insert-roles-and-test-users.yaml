@@ -1,18 +1,45 @@
 databaseChangeLog:
+  # Роли
   - changeSet:
-      id: 3
+      id: 3-1
       author: dev
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: "0"
+            sql: SELECT COUNT(*) FROM roles WHERE name = 'ADMIN'
       changes:
         - insert:
             tableName: roles
             columns:
               - column: { name: id, valueNumeric: 1 }
               - column: { name: name, value: "ADMIN" }
+
+  - changeSet:
+      id: 3-2
+      author: dev
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: "0"
+            sql: SELECT COUNT(*) FROM roles WHERE name = 'USER'
+      changes:
         - insert:
             tableName: roles
             columns:
               - column: { name: id, valueNumeric: 2 }
               - column: { name: name, value: "USER" }
+
+  # Пользователь admin
+  - changeSet:
+      id: 3-3
+      author: dev
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: "0"
+            sql: SELECT COUNT(*) FROM users WHERE email = 'admin@example.com'
+      changes:
         - insert:
             tableName: users
             columns:
@@ -20,6 +47,17 @@ databaseChangeLog:
               - column: { name: password, value: "$2a$10$D/kXkIm5wa.CmnDN1rYs5u5f3ohxvz9RY5AneYad7e0kZFzpnHeEC" }
               - column: { name: enabled, valueBoolean: true }
               - column: { name: created_at, valueDate: "now()" }
+
+  # Пользователь user
+  - changeSet:
+      id: 3-4
+      author: dev
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: "0"
+            sql: SELECT COUNT(*) FROM users WHERE email = 'user@example.com'
+      changes:
         - insert:
             tableName: users
             columns:
@@ -27,13 +65,43 @@ databaseChangeLog:
               - column: { name: password, value: "$2a$10$LrSk7OJ5EXlbxw.u4.LLb.RI7nt.kRt5kXtI.oQScH/wnb6oaH9TO" }
               - column: { name: enabled, valueBoolean: true }
               - column: { name: created_at, valueDate: "now()" }
+
+  # Связь admin с ролью ADMIN
+  - changeSet:
+      id: 3-5
+      author: dev
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: "0"
+            sql: |
+              SELECT COUNT(*) FROM user_roles ur
+              JOIN users u ON u.id = ur.user_id
+              JOIN roles r ON r.id = ur.role_id
+              WHERE u.email = 'admin@example.com' AND r.name = 'ADMIN'
+      changes:
         - insert:
             tableName: user_roles
             columns:
-              - column: { name: user_id, valueNumeric: 1 }
-              - column: { name: role_id, valueNumeric: 1 }
+              - column: { name: user_id, valueComputed: "(SELECT id FROM users WHERE email = 'admin@example.com')" }
+              - column: { name: role_id, valueComputed: "(SELECT id FROM roles WHERE name = 'ADMIN')" }
+
+  # Связь user с ролью USER
+  - changeSet:
+      id: 3-6
+      author: dev
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: "0"
+            sql: |
+              SELECT COUNT(*) FROM user_roles ur
+              JOIN users u ON u.id = ur.user_id
+              JOIN roles r ON r.id = ur.role_id
+              WHERE u.email = 'user@example.com' AND r.name = 'USER'
+      changes:
         - insert:
             tableName: user_roles
             columns:
-              - column: { name: user_id, valueNumeric: 2 }
-              - column: { name: role_id, valueNumeric: 2 }
+              - column: { name: user_id, valueComputed: "(SELECT id FROM users WHERE email = 'user@example.com')" }
+              - column: { name: role_id, valueComputed: "(SELECT id FROM roles WHERE name = 'USER')" }

@@ -24,6 +24,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Set;
 
+/**
+ * Контроллер аутентификации.
+ * <p>Предоставляет публичные эндпоинты для регистрации и входа в систему.
+ * При успешном входе возвращает JWT токен.</p>
+ */
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
@@ -35,6 +40,12 @@ public class AuthController {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
 
+    /**
+     * Аутентифицирует пользователя по email и паролю.
+     *
+     * @param request учётные данные (email, пароль)
+     * @return DTO с JWT токеном, типом Bearer, email пользователя и его ролью
+     */
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> authenticateUser(@Valid @RequestBody LoginRequest request) {
         Authentication authentication = authenticationManager.authenticate(
@@ -46,6 +57,12 @@ public class AuthController {
         return ResponseEntity.ok(new LoginResponse(jwt, request.getEmail(), role));
     }
 
+    /**
+     * Регистрирует нового пользователя с ролью USER.
+     *
+     * @param request DTO с email и паролем
+     * @return сообщение об успехе (201 Created) или ошибка (400 Bad Request), если email уже занят
+     */
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody RegisterRequest request) {
         if (userRepository.existsByEmail(request.getEmail())) {

@@ -11,12 +11,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class TransferService {
+public class TransferService implements TransferOperations {
 
     private final CardRepository cardRepository;
     private final CardService cardService;

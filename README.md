@@ -1,10 +1,12 @@
-# Bank Cards Management System
+# Система управления банковскими картами
 
 Backend-приложение на Java (Spring Boot) для управления банковскими картами:
 - Создание и управление картами
 - Просмотр карт (админ – всех, пользователь – своих)
 - Переводы между своими картами
 - Шифрование номеров карт, маскирование, ролевой доступ (ADMIN / USER)
+
+ [Полное ТЗ можно посмотреть здесь](docs/TECHNICAL_SPECIFICATION.md)
 
 ## Стек технологий
 - Java 21
@@ -56,18 +58,18 @@ mvn clean spring-boot:run
 
 admin@example.com	пароль: admin123  роль: ADMIN
 
-user@example.com	пароль: user123	 роль: USER
+user@example.com	пароль: test	 роль: USER
 
 
-## API документация
+## Документация
+
+[OpenAPI (yaml)](docs/openapi.yaml)
 
 После запуска приложения доступны:
 
-    Swagger UI: http://localhost:8080/swagger-ui.html
+[Swagger UI](http://localhost:8080/swagger-ui.html)
 
-    OpenAPI спецификация (JSON): http://localhost:8080/v3/api-docs
-
-    Файл спецификации (YAML): docs/openapi.yaml
+[OpenAPI спецификация](http://localhost:8080/v3/api-docs)
 
 ## Основные эндпоинты
 
